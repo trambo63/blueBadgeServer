@@ -9,8 +9,7 @@ const Review = db.define('review', {    // look into fetch rating logic on the f
     reviewersPost: {
         type: DataTypes.STRING,
         allowNull: false
-    }
-    
+    },
 })
 
 module.exports = Review;
