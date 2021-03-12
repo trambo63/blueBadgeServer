@@ -3,7 +3,7 @@ const { UniqueConstraintError } = require('sequelize/types');
 const router = require('express').Router();
 
 //register 
-router.post(" /register", async (req, res) => {
+router.post("/register", async (req, res) => {
     const { firstName,
         lastName,
         email,
