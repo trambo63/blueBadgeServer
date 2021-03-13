@@ -1,18 +1,19 @@
 require('dotenv').config();
 
+
 const express = require('express');
 const dbConnection = require('./db')
-// const middleware = require('./middleware')
+//const middleware = require('./middleware')
 const app = express();
 
 
-// app.use(middleware.CORS);
-// app.use(express.json());
+//app.use(middleware.CORS);
+app.use(express.json());
 
-// const controllers = require('./controllers');
+const controllers = require('./controllers');
 
-// app.use('/review', controllers.reviewcontroller)
-// app.use('/user', controllers.usercontroller)
+app.use('/review', controllers.reviewcontroller)
+app.use('/user', controllers.usercontroller)
 
 dbConnection.authenticate()
     .then(() => dbConnection.sync())
@@ -25,5 +26,8 @@ dbConnection.authenticate()
         console.log('[Server]: Server Crashed');
         console.log(err);
     })
+
+
+
 
 
