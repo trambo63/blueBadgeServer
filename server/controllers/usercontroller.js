@@ -1,5 +1,7 @@
-const { UniqueConstraintError } = require('sequelize/types');
-
+const { UniqueConstraintError } = require('sequelize/lib/errors');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const {UserModel} = require('../models');
 const router = require('express').Router();
 
 //register 
