@@ -6,7 +6,7 @@ const validateSession = async (req, res, next) => {
         return next();
     } else if (req.headers.authorization) {
         const {authorization} = req.headers;
-        const payload = authorization ? jwt.varify(authorization, process.env.JWT_SECRET) : undefined;
+        const payload = authorization ? jwt.verify(authorization, process.env.JWT_SECRET) : undefined;
 
         if (payload) {
             let foundUser = await UserModel.findOne({
@@ -16,7 +16,7 @@ const validateSession = async (req, res, next) => {
             });
 
             if (foundUser) {
-                req.user = founderUser;
+                req.user = foundUser;
                 next();
             } else {
                 res.status(400).send({
@@ -35,4 +35,4 @@ const validateSession = async (req, res, next) => {
     }
 }
 
-export default validateSession;
+module.exports = validateSession;
