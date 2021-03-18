@@ -35,4 +35,4 @@ const validateSession = async (req, res, next) => {
     }
 }
 
-export default validateSession;
+module.exports=validateSession;
