@@ -34,3 +34,5 @@ const validateSession = async (req, res, next) => {
         });
     }
 }
+
+export default validateSession
