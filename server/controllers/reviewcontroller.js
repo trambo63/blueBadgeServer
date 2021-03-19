@@ -2,34 +2,54 @@ const router = require('express').Router();
 const { validateSession } = require('../middleware');
 const { ReviewModel } = require('../models');
 
-router.get('/put', async (req, res) => {
-    const {reviewTitle, reviewersPost} = req.body;
+//get by movie_id
+router.get('/:id', async (req, res) => {
     try{
-        const reviewUpdated = ReviewModel.update(
-            {reviewTitle, reviewersPost},
-            {where: {id: req.params.id}}
-        )
-        res.status(200).json({
-            message: "review updated",
-            reviewUpdated
+        const movieReviews = await ReviewModel.findAll({
+            where: {
+                movie_id: req.params.id
+            }
         });
+        res.status(200).json(movieReviews)
     } catch (err) {
         res.status(500).json({
-            message: `update failed ${err}`
-        });
+            message: `Failed to retrive reviews: ${err}`
+        })
     }
 });
 
-router.post('/', validateSession, async (req, res) => {
+//GET ALL BY USER
+router.get('/byUser', validateSession, async (req, res) => {
+    try{
+        const locateReviews = await ReviewModel.findAll({
+            where: {
+                owner_id: req.user.id
+            }
+        });
+        res.status(200).json({
+            message: 'Reviews Retrived!',
+            locateReviews
+        })
+    } catch (err) {
+        res.status(500).json({
+            message: `Failed to retrive reviews: ${err}`
+        })
+    }
+});
+
+router.post('/post', validateSession, async (req, res) => {
     const{
         reviewTitle,
-        reviewersPost
+        reviewersPost,
+        movie_id
     } = req.body;
 
     try {
         const Review = await ReviewModel.create({
             reviewTitle,
-            reviewersPost
+            reviewersPost,
+            movie_id,
+            owner_id: req.user.id
         });
         res.status(200).json({
             message: 'Review successfully created', Review,
@@ -42,7 +62,7 @@ router.post('/', validateSession, async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', validateSession, async (req, res) => {
     const {
         reviewTitle,
         reviewersPost
@@ -52,6 +72,7 @@ router.put('/:id', async (req, res) => {
             {where: { id: req.params.id}});
             res.status(200).json({
                 message: 'review successfully updated',
+                reviewUpdated
             });
 
     }catch(err) {
@@ -61,7 +82,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', validateSession, async (req, res) => {
     try{
         await ReviewModel.destroy({
             where: {

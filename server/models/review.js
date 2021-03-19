@@ -7,9 +7,17 @@ const Review = db.define('review', {    // look into fetch rating logic on the f
         allowNull: false
     },
     reviewersPost: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(1000),
         allowNull: false
     },
+    owner_id : {
+        type: DataTypes.INTEGER,
+        allownull: false
+    },
+    movie_id : {
+        type: DataTypes.INTEGER,
+        allownull: false
+    }
 })
 
 module.exports = Review;

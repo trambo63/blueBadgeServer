@@ -1,14 +1,12 @@
 require('dotenv').config();
+const Express = require('express');
+const dbConnection = require('./db');
+const middleware = require('./middleware');
+const app = Express();
 
 
-const express = require('express');
-const dbConnection = require('./db')
-//const middleware = require('./middleware')
-const app = express();
-
-
-//app.use(middleware.CORS);
-app.use(express.json());
+app.use(middleware.CORS);
+app.use(Express.json());
 
 const controllers = require('./controllers');
 
@@ -19,7 +17,7 @@ dbConnection.authenticate()
     .then(() => dbConnection.sync())
     .then(() => {
         app.listen(process.env.PORT, () => {
-            console.log(`[Server]: App is listening on 3001.`);
+            console.log(`[Server]: App is listening on ${process.env.PORT}.`);
         }); 
     })
     .catch((err) => {
